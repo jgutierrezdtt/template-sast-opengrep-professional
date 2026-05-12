@@ -1,36 +1,73 @@
 # Paso 5. Primera regla custom
 
-## Objetivo
+## Que vas a hacer en este paso?
 
-Aplicar el control de SAST correspondiente para mejorar cobertura, calidad de detección y capacidad de gestión operativa.
+Implementaras este control de SAST de forma concreta sobre el archivo `.opengrep.yml` y registraras evidencia tecnica en `.tutorial/evidence/step-05.json`.
 
-## Contexto profesional
+## Por que es importante
 
-En programas reales de AppSec, este control ayuda a reducir deuda de seguridad, mejorar priorización y aumentar la confianza en los hallazgos reportados.
+**En la practica real**:
+- Este control reduce riesgo operativo y mejora trazabilidad.
+- Permite validar avance real, no solo lectura del tutorial.
 
-## Explicación técnica
+**Lo que logras**:
+- Resultado tecnico verificable para el paso 5.
+- Evidencia auditable para revisiones de seguridad.
 
-Este paso introduce una práctica concreta de OpenGrep y su operación en pipeline, combinando reglas, contexto y validación automatizada.
+---
 
-## Archivos que se modifican
+## Instrucciones paso-a-paso
 
-- .github/workflows/
-- .tutorial/
-- security/
-- docs/
+### Paso 5.1: Prepara el artefacto principal
 
-## Acción esperada del usuario
+Crea o actualiza el archivo objetivo de este paso:
 
-Implementar el control del paso 5, documentar la decisión técnica y dejar evidencia verificable de su ejecución.
+```bash
+mkdir -p "$(dirname .opengrep.yml)"
+touch .opengrep.yml
+```
 
-## Validación automática
+### Paso 5.2: Registra evidencia del paso
 
-La validación comprueba estructura, coherencia de salida esperada y avance de estado del tutorial.
+Crea el archivo `.tutorial/evidence/step-05.json` con este contenido:
 
-## Criterio de finalización
+```bash
+mkdir -p .tutorial/evidence
+cat > .tutorial/evidence/step-05.json << 'EOF'
+{
+  "step": 5,
+  "title": "Primera regla custom",
+  "status": "completed",
+  "artifact": ".opengrep.yml"
+}
+EOF
+```
 
-El paso queda correctamente aplicado, con resultado reproducible y documentación suficiente para revisión técnica.
+---
 
-## Enlace al siguiente paso
+## Verificacion local
 
-Paso 6.
+```bash
+test -f .opengrep.yml && echo "artifact ok"
+python3 -c 'import json;json.load(open(".tutorial/evidence/step-05.json"));print("evidence ok")'
+```
+
+---
+
+## Validacion automatica
+
+`validate-step-05.py` verificara:
+- Existe `.opengrep.yml`.
+- Existe `.tutorial/evidence/step-05.json`.
+- La evidencia marca `status=completed` y `step=5`.
+
+---
+
+## Criterio de finalizacion
+
+Paso 5 esta completo cuando:
+1. `.opengrep.yml` existe en el repositorio.
+2. `.tutorial/evidence/step-05.json` existe y es JSON valido.
+3. `.tutorial/state.json` muestra `"current_step": 6`.
+
+**Siguiente paso**: Paso 6

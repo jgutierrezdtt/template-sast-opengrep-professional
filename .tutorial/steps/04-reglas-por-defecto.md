@@ -2,41 +2,51 @@
 
 ## Objetivo de aprendizaje
 
-Definir reglas de detección que sean útiles, mantenibles y comprensibles por el equipo.
+Este paso introduce un control de SAST y debe dejar un cambio comprensible en rules/security-rules.yml.
+
+## Que vas a cambiar y por que
+
+Actualiza rules/security-rules.yml para que el control de "reglas por defecto" quede explícito y revisable.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `rules/security-rules.yml`.
-- Seccion donde aplicar el cambio: lista rules del motor SAST.
-- Resultado esperado: el repositorio incorpora el control de este paso de forma legible y revisable.
+- Aplícalo en la parte del archivo que corresponde al título del paso.
+- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
 
-## Cambio que debes introducir
+## Cambio base recomendado
 
-Copia este bloque como base y adáptalo al contexto real del repositorio:
+Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
 
 ```yaml
 rules:
-  - id: insecure-eval
-    message: Evita eval con input controlado por usuario
-    severity: ERROR
-    languages: [javascript]
-    pattern: eval($X)
+id: insecure-eval
+message:
+severity: ERROR
+pattern: eval($X)
 ```
 
 ## Como adaptarlo correctamente
 
-- Cambia el patrón solo si tienes un caso real del lenguaje del repositorio.
-- Mantén un mensaje que explique claramente el riesgo y la remediación.
+- Mantén el cambio pequeño y centrado en una sola idea por paso.
+- Usa nombres claros para secciones, reglas o jobs.
+- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+
+## Que deberia verse al terminar
+
+- La intención del cambio se entiende leyendo el archivo.
+- El archivo muestra el control sin depender de comentarios ambiguos.
+- Los marcadores esperados del paso aparecen de forma natural en la configuración.
 
 ## Que valida el workflow automaticamente
 
 - `validate-steps.yml` se ejecuta con `push`, `pull_request` y `workflow_dispatch`.
-- `scripts/validate-step-04.py` comprueba el archivo y los marcadores esperados de este paso.
-- Debe encontrar el marcador `rules:` en `rules/security-rules.yml`.
-- Debe encontrar el marcador `id: insecure-eval` en `rules/security-rules.yml`.
-- Debe encontrar el marcador `message:` en `rules/security-rules.yml`.
-- Debe encontrar el marcador `severity: ERROR` en `rules/security-rules.yml`.
-- Debe encontrar el marcador `pattern: eval($X)` en `rules/security-rules.yml`.
+- `scripts/validate-step-04.py` comprueba este paso contra el archivo configurado.
+- El workflow busca `rules:` dentro de `rules/security-rules.yml`.
+- El workflow busca `id: insecure-eval` dentro de `rules/security-rules.yml`.
+- El workflow busca `message:` dentro de `rules/security-rules.yml`.
+- El workflow busca `severity: ERROR` dentro de `rules/security-rules.yml`.
+- El workflow busca `pattern: eval($X)` dentro de `rules/security-rules.yml`.
 
 ## Criterio de finalizacion
 

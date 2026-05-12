@@ -2,42 +2,52 @@
 
 ## Objetivo de aprendizaje
 
-Distinguir una excepción justificada de una supresión sin control.
+Este paso introduce un control de SAST y debe dejar un cambio comprensible en docs/sast-exceptions.yml.
+
+## Que vas a cambiar y por que
+
+Actualiza docs/sast-exceptions.yml para que el control de "falso positivo documentado" quede explícito y revisable.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `docs/sast-exceptions.yml`.
-- Seccion donde aplicar el cambio: catálogo de excepciones y falsos positivos.
-- Resultado esperado: el repositorio incorpora el control de este paso de forma legible y revisable.
+- Aplícalo en la parte del archivo que corresponde al título del paso.
+- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
 
-## Cambio que debes introducir
+## Cambio base recomendado
 
-Copia este bloque como base y adáptalo al contexto real del repositorio:
+Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
 
 ```yaml
 exceptions:
-  - rule_id: insecure-eval
-    path: src/legacy.js
-    reason: "caso heredado aislado"
-    owner: "team-appsec"
-    expires_on: "2026-12-31"
+rule_id:
+path:
+reason:
+owner:
 ```
 
 ## Como adaptarlo correctamente
 
-- Cada excepción debe estar vinculada a una regla y a una ruta concreta.
-- No uses excepciones globales si el problema está localizado.
+- Mantén el cambio pequeño y centrado en una sola idea por paso.
+- Usa nombres claros para secciones, reglas o jobs.
+- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+
+## Que deberia verse al terminar
+
+- La intención del cambio se entiende leyendo el archivo.
+- El archivo muestra el control sin depender de comentarios ambiguos.
+- Los marcadores esperados del paso aparecen de forma natural en la configuración.
 
 ## Que valida el workflow automaticamente
 
 - `validate-steps.yml` se ejecuta con `push`, `pull_request` y `workflow_dispatch`.
-- `scripts/validate-step-08.py` comprueba el archivo y los marcadores esperados de este paso.
-- Debe encontrar el marcador `exceptions:` en `docs/sast-exceptions.yml`.
-- Debe encontrar el marcador `rule_id:` en `docs/sast-exceptions.yml`.
-- Debe encontrar el marcador `path:` en `docs/sast-exceptions.yml`.
-- Debe encontrar el marcador `reason:` en `docs/sast-exceptions.yml`.
-- Debe encontrar el marcador `owner:` en `docs/sast-exceptions.yml`.
-- Debe encontrar el marcador `expires_on:` en `docs/sast-exceptions.yml`.
+- `scripts/validate-step-08.py` comprueba este paso contra el archivo configurado.
+- El workflow busca `exceptions:` dentro de `docs/sast-exceptions.yml`.
+- El workflow busca `rule_id:` dentro de `docs/sast-exceptions.yml`.
+- El workflow busca `path:` dentro de `docs/sast-exceptions.yml`.
+- El workflow busca `reason:` dentro de `docs/sast-exceptions.yml`.
+- El workflow busca `owner:` dentro de `docs/sast-exceptions.yml`.
+- El workflow busca `expires_on:` dentro de `docs/sast-exceptions.yml`.
 
 ## Criterio de finalizacion
 

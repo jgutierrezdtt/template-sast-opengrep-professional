@@ -1,0 +1,6 @@
+tutorial:
+  name: SAST OpenGrep Professional
+  level: professional
+  total_steps: 30
+  default_language: es
+  base_repository: jgutierrezdtt/security-tutorial-base

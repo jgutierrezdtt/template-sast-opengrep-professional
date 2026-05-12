@@ -1,73 +1,23 @@
 # Paso 9. Gestion de excepciones
 
-## Que vas a hacer en este paso?
+## Que hace este paso automaticamente
 
-Implementaras este control de SAST de forma concreta sobre el archivo `rules/security-rules.yml` y registraras evidencia tecnica en `.tutorial/evidence/step-09.json`.
+Este paso se valida de forma automatica en el pipeline de SAST. No requiere ejecucion manual de comandos por parte del usuario.
 
-## Por que es importante
+## Como se ejecuta
 
-**En la practica real**:
-- Este control reduce riesgo operativo y mejora trazabilidad.
-- Permite validar avance real, no solo lectura del tutorial.
+- El workflow `validate-steps.yml` se dispara por evento `push`, `pull_request` y `workflow_dispatch`.
+- El validador `scripts/validate-step-09.py` comprueba el estado esperado para este paso.
+- Si la validacion pasa, el estado del tutorial se refleja en `.tutorial/state.json`.
 
-**Lo que logras**:
-- Resultado tecnico verificable para el paso 9.
-- Evidencia auditable para revisiones de seguridad.
+## Evidencia tecnica evaluada por el sistema
 
----
+- Artefacto principal esperado: `rules/security-rules.yml`.
+- Estado del paso en evidencia automatica: `.tutorial/evidence/step-09.json`.
+- Coherencia de progresion en: `.tutorial/state.json`.
 
-## Instrucciones paso-a-paso
+## Criterio de finalizacion automatica
 
-### Paso 9.1: Prepara el artefacto principal
+El paso 9 queda completado cuando el workflow reporta exito para `validate-step-09.py` en GitHub Actions.
 
-Crea o actualiza el archivo objetivo de este paso:
-
-```bash
-mkdir -p "$(dirname rules/security-rules.yml)"
-touch rules/security-rules.yml
-```
-
-### Paso 9.2: Registra evidencia del paso
-
-Crea el archivo `.tutorial/evidence/step-09.json` con este contenido:
-
-```bash
-mkdir -p .tutorial/evidence
-cat > .tutorial/evidence/step-09.json << 'EOF'
-{
-  "step": 9,
-  "title": "Gestion de excepciones",
-  "status": "completed",
-  "artifact": "rules/security-rules.yml"
-}
-EOF
-```
-
----
-
-## Verificacion local
-
-```bash
-test -f rules/security-rules.yml && echo "artifact ok"
-python3 -c 'import json;json.load(open(".tutorial/evidence/step-09.json"));print("evidence ok")'
-```
-
----
-
-## Validacion automatica
-
-`validate-step-09.py` verificara:
-- Existe `rules/security-rules.yml`.
-- Existe `.tutorial/evidence/step-09.json`.
-- La evidencia marca `status=completed` y `step=9`.
-
----
-
-## Criterio de finalizacion
-
-Paso 9 esta completo cuando:
-1. `rules/security-rules.yml` existe en el repositorio.
-2. `.tutorial/evidence/step-09.json` existe y es JSON valido.
-3. `.tutorial/state.json` muestra `"current_step": 10`.
-
-**Siguiente paso**: Paso 10
+Siguiente paso automatico: Paso 10.

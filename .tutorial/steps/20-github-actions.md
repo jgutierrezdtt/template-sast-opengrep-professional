@@ -1,23 +1,35 @@
 # Paso 20. Github actions
 
-## Que hace este paso automaticamente
+## Objetivo de aprendizaje
 
-Este paso se valida de forma automatica en el pipeline de SAST. No requiere ejecucion manual de comandos por parte del usuario.
+En este paso vas a practicar un control de SAST para entender que decision de configuracion aplicar y por que.
 
-## Como se ejecuta
+## Que debe hacer la persona participante
 
-- El workflow `validate-steps.yml` se dispara por evento `push`, `pull_request` y `workflow_dispatch`.
-- El validador `scripts/validate-step-20.py` comprueba el estado esperado para este paso.
-- Si la validacion pasa, el estado del tutorial se refleja en `.tutorial/state.json`.
+1. Revisar el contexto del control en este paso.
+2. Editar la configuracion esperada en `.github/workflows/sast.yml`.
+3. Guardar y subir el cambio en el flujo normal del repositorio (commit/push o PR).
 
-## Evidencia tecnica evaluada por el sistema
+## Que configurar exactamente
 
-- Artefacto principal esperado: `.github/workflows/sast.yml`.
-- Estado del paso en evidencia automatica: `.tutorial/evidence/step-20.json`.
-- Coherencia de progresion en: `.tutorial/state.json`.
+- Campo o seccion objetivo: relacionado con "Github actions".
+- Ubicacion principal: `.github/workflows/sast.yml`.
+- Resultado esperado: que la configuracion refleje el control del paso 20.
 
-## Criterio de finalizacion automatica
+## Checklist de configuracion
 
-El paso 20 queda completado cuando el workflow reporta exito para `validate-step-20.py` en GitHub Actions.
+- El cambio del paso 20 esta presente en `.github/workflows/sast.yml`.
+- El cambio es coherente con el objetivo del paso.
+- El repositorio incluye la evidencia de progreso para este paso.
 
-Siguiente paso automatico: Paso 21.
+## Validacion automatica (sin ejecucion manual)
+
+- `validate-steps.yml` se ejecuta automaticamente por eventos `push`, `pull_request` y `workflow_dispatch`.
+- `scripts/validate-step-20.py` valida que el control de este paso esta aplicado.
+- El estado de progreso se refleja en `.tutorial/state.json`.
+
+## Criterio de finalizacion
+
+El paso 20 se marca como completado cuando GitHub Actions reporta exito para `validate-step-20.py`.
+
+Siguiente paso: Paso 21.

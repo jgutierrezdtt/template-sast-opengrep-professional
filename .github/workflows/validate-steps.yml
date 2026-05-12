@@ -33,12 +33,3 @@ jobs:
             echo "One or more step validators failed"
             exit 1
           fi
-
-      - name: Show tutorial state
-        shell: bash
-        run: |
-          if [[ -f .tutorial/state.json ]]; then
-            cat .tutorial/state.json
-          else
-            echo '{"status":"not-started","current_step":0,"completed_steps":[]}'
-          fi

@@ -2,34 +2,42 @@
 
 ## Objetivo de aprendizaje
 
-En este paso vas a practicar un control de SAST para entender que decision de configuracion aplicar y por que.
+Definir la base del análisis SAST para el tutorial.
 
-## Que debe hacer la persona participante
+## Archivo y seccion que debes modificar
 
-1. Revisar el contexto del control en este paso.
-2. Editar la configuracion esperada en `rules/security-rules.yml`.
-3. Guardar y subir el cambio en el flujo normal del repositorio (commit/push o PR).
+- Archivo objetivo: `rules/security-rules.yml`.
+- Seccion donde aplicar el cambio: configuración principal de reglas.
+- Resultado esperado: el repositorio incorpora el control de este paso de forma legible y revisable.
 
-## Que configurar exactamente
+## Cambio que debes introducir
 
-- Campo o seccion objetivo: relacionado con "Primer escaneo con opengrep".
-- Ubicacion principal: `rules/security-rules.yml`.
-- Resultado esperado: que la configuracion refleje el control del paso 2.
+Copia este bloque como base y adáptalo al contexto real del repositorio:
 
-## Checklist de configuracion
+```yaml
+rules:
+  - id: demo-rule
+    message: Regla base del tutorial
+    severity: WARNING
+    languages: [javascript]
+    pattern: console.log($X)
+```
 
-- El cambio del paso 2 esta presente en `rules/security-rules.yml`.
-- El cambio es coherente con el objetivo del paso.
-- El repositorio incluye la evidencia de progreso para este paso.
+## Como adaptarlo correctamente
 
-## Validacion automatica (sin ejecucion manual)
+- Cambia la regla demo por un caso real del proyecto.
+- Usa identificadores estables para poder revisar excepciones y métricas.
 
-- `validate-steps.yml` se ejecuta automaticamente por eventos `push`, `pull_request` y `workflow_dispatch`.
-- `scripts/validate-step-02.py` valida que el control de este paso esta aplicado.
-- El estado de progreso se refleja en `.tutorial/state.json`.
+## Que valida el workflow automaticamente
+
+- `validate-steps.yml` se ejecuta con `push`, `pull_request` y `workflow_dispatch`.
+- `scripts/validate-step-02.py` comprueba el archivo y los marcadores esperados de este paso.
+- Debe encontrar el marcador `rules:` en `rules/security-rules.yml`.
+- Debe encontrar el marcador `id: demo-rule` en `rules/security-rules.yml`.
+- Debe encontrar el marcador `severity: WARNING` en `rules/security-rules.yml`.
 
 ## Criterio de finalizacion
 
-El paso 2 se marca como completado cuando GitHub Actions reporta exito para `validate-step-02.py`.
+El paso 2 queda completado cuando el workflow de GitHub Actions valida este cambio sin errores.
 
 Siguiente paso: Paso 3.

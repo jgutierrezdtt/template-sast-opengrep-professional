@@ -26,7 +26,7 @@ Equipos de AppSec, DevSecOps, ingeniería de plataforma y desarrollo que necesit
 
 ## Inicio del tutorial
 
-[![Empezar tutorial](https://img.shields.io/badge/Empezar%20tutorial-0b69ff?style=for-the-badge&logo=github&logoColor=white)](https://github.com/new?template_name=template-sast-opengrep-professional&template_owner=jgutierrezdtt)
+[![Empezar tutorial](https://img.shields.io/badge/Empezar%20tutorial-0b69ff?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jgutierrezdtt/template-sast-opengrep-professional/fork)
 
 ## Acceso al repositorio
 

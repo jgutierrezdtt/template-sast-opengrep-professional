@@ -2,21 +2,21 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce la aplicación vulnerable base y debe dejar un cambio comprensible en `rules/security-rules.yml`.
+Entender por qué el laboratorio arranca sobre una aplicación deliberadamente vulnerable y con una regla mínima. Antes de hablar de calidad de hallazgos, excepciones o gates, necesitas un punto de partida que haga visible cómo se define una señal SAST básica.
 
 ## Que vas a cambiar y por que
 
-Actualiza `rules/security-rules.yml` para que el primer control de SAST quede explícito y revisable. En este paso no estás resolviendo todavía un caso complejo, sino estableciendo una regla base identificable que permita anclar el laboratorio sobre una aplicación vulnerable conocida.
+Vas a tocar `rules/security-rules.yml` para dejar creada una primera regla reconocible. El objetivo no es detectar ya el caso más importante del repositorio, sino aprender qué aspecto tiene el esqueleto mínimo de una regla y cómo se usa para anclar el laboratorio sobre una base vulnerable conocida. Si esta primera pieza no es clara, el resto del tutorial se convierte en una colección de hallazgos sin referencia común.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `rules/security-rules.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Este paso se centra en declarar la primera regla del repositorio, no en cubrir todavía todos los patrones inseguros.
+- Piensa este cambio como la semilla del catálogo de reglas: a partir de aquí vendrán reglas más precisas, hallazgos, excepciones y priorización.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
+No copies este bloque como si fuese una política final. Úsalo para entender qué piezas mínimas necesita una regla antes de empezar a sofisticarla.
 
 ```yaml
 rules:
@@ -24,20 +24,25 @@ rules:
     severity: WARNING
 ```
 
+## Que enseña esta regla minima
+
+- `rules:` deja claro que trabajas sobre un conjunto de reglas y no sobre una comprobación aislada pegada a mano.
+- `id: demo-rule` crea un nombre estable para identificar la detección cuando empieces a ver resultados, documentación o excepciones.
+- `severity: WARNING` mantiene la primera señal en un nivel manejable para aprender el flujo sin convertir todavía el laboratorio en una política bloqueante.
+
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `id: demo-rule` como identificador simple y fácil de reconocer durante el arranque del laboratorio.
-- Mantén `severity: WARNING` para que la primera regla represente una señal inicial sin imponer todavía un criterio duro de bloqueo.
-- Piensa este paso como la base sobre la que luego evolucionarán reglas, falsos positivos y excepciones.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- No intentes detectar demasiadas cosas a la vez; en este paso importa más entender la forma de la regla que su cobertura.
+- Usa un `id` simple para que luego puedas reconocer con facilidad qué hallazgos pertenecen a esta primera iteración.
+- Mantén `severity: WARNING` si quieres que la primera lectura del laboratorio enseñe señal básica antes de endurecer criterios.
+- El resultado esperado es una base pequeña pero legible sobre la que crecerá el programa SAST.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende que ya existe una regla mínima sobre la que crecerá el programa SAST.
+- El archivo ya contiene una regla mínima reconocible y fácil de explicar.
+- El lector entiende por qué el laboratorio arranca con una señal sencilla en vez de empezar con reglas complejas.
+- Queda claro que esta regla no resuelve el problema completo, pero sí crea una base útil para los siguientes pasos.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuración.
 
 ## Que valida el workflow automaticamente
 

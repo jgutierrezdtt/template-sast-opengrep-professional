@@ -2,21 +2,21 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce la interpretación de resultados SAST y debe dejar un cambio comprensible en `docs/sast-analysis.md`.
+Aprender a convertir una alerta SAST en un análisis útil. Un resultado de OpenGrep por sí solo no te dice qué hacer; este paso te enseña a descomponerlo en hallazgo, origen, severidad, confianza y decisión para que el equipo pueda actuar con criterio.
 
 ## Que vas a cambiar y por que
 
-Actualiza `docs/sast-analysis.md` para que un hallazgo de SAST no quede reducido a una alerta sin contexto. En este paso el documento debe ayudarte a responder qué se encontró, qué regla lo originó, qué severidad y confianza tiene y qué decisión corresponde tomar.
+Vas a estructurar `docs/sast-analysis.md` para que un hallazgo deje de ser una línea aislada en la salida del escáner. La finalidad del paso es obligarte a responder cinco preguntas concretas: qué se encontró, de dónde viene, qué gravedad técnica aparenta tener, cuánta confianza merece y qué decisión operativa debe tomarse. Esa disciplina es la que separa un escaneo ruidoso de un programa SAST gobernable.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `docs/sast-analysis.md`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Este documento no sirve para copiar la salida del escáner, sino para interpretarla.
+- Piensa la edición como una plantilla de análisis que otro revisor pueda leer y entender sin volver a ejecutar nada.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
+No copies este bloque como un formulario vacío. Úsalo como estructura para obligarte a pensar cada hallazgo antes de decidir si se corrige, se acepta o se sigue investigando.
 
 ```markdown
 ## Hallazgo
@@ -26,20 +26,27 @@ Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo 
 ## Decision
 ```
 
+## Como leer cada seccion
+
+- `## Hallazgo` describe el comportamiento inseguro observado, no el nombre del archivo sin más.
+- `## Regla o fuente` conecta la señal con la regla, consulta o fuente que originó la detección.
+- `## Severidad` expresa el posible impacto técnico si el hallazgo es real.
+- `## Confianza` indica cuán probable es que la alerta represente un problema verdadero y no ruido.
+- `## Decision` fuerza una conclusión operativa: corregir, investigar más, aceptar con justificación o crear excepción.
+
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `## Regla o fuente` para conectar el hallazgo con la regla que lo detectó o con su origen.
-- Usa `## Confianza` para distinguir señal sólida de hallazgo que necesita revisión adicional.
-- Haz que `## Decision` cierre el análisis con una acción clara y no con una descripción pasiva.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- No trates todas las alertas como iguales; este documento existe precisamente para distinguirlas.
+- Usa `## Confianza` para evitar decisiones precipitadas sobre hallazgos débiles o ambiguos.
+- Haz que `## Decision` termine en una acción defendible y no en una frase neutra.
+- El objetivo es que cualquiera pueda entender por qué el equipo hizo lo que hizo con ese resultado.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El documento ya sirve para convertir resultados de OpenGrep en decisiones operables.
+- El documento deja claro cómo pasar de una alerta a una decisión.
+- El lector entiende que severidad y confianza no significan lo mismo y que ambas influyen en la respuesta.
+- La plantilla resultante sirve para discutir hallazgos con desarrollo, seguridad o gestión sin perder contexto.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuración.
 
 ## Que valida el workflow automaticamente
 

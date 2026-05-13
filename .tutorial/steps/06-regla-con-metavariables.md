@@ -2,21 +2,29 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce una regla con metavariables y debe dejar un cambio comprensible en `rules/security-rules.yml`.
+Entender por que una regla con metavariable detecta mas que una regla con literal fijo, y cuándo esa generalización es un activo y cuándo introduce ruido.
+
+## Por que importa esto
+
+Una regla que solo detecta `eval("codigo-concreto")` no sirve en produccion. El codigo real pasa variables, concatenaciones y expresiones. Si el patron no captura eso, el 90% de los casos reales escapan al analisis.
+
+Las metavariables son el mecanismo que convierte una deteccion de laboratorio en una deteccion de produccion.
 
 ## Que vas a cambiar y por que
 
-Actualiza `rules/security-rules.yml` para que el uso de metavariables quede explícito y revisable. En este caso, `pattern: eval($X)` es la clave del paso porque `$X` representa el valor variable capturado por la regla y explica cómo OpenGrep generaliza el match sin limitarse a un literal fijo.
+Actualiza `rules/security-rules.yml` para que la regla de `eval` use `$X` como metavariable explicita. El cambio no es solo tecnico: es la primera vez que documentas intencionalmente que la regla captura cualquier expresion pasada a `eval`, no solo un literal concreto.
+
+Esto afecta al alcance de la deteccion y a la tasa de falsos positivos. Entenderlo ahora evita sorpresas cuando la regla entre en el pipeline.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `rules/security-rules.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Actualiza la regla existente de `insecure-eval` para que `$X` sea explicito en el `pattern`.
+- No añadas una segunda regla: refina la que ya tienes.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
+Usa este bloque para entender como una metavariable cambia el alcance del patron respecto a un literal fijo.
 
 ```yaml
 rules:
@@ -26,20 +34,26 @@ rules:
     pattern: eval($X)
 ```
 
+## Que te esta enseñando este cambio
+
+- `$X` es una metavariable: representa cualquier expresion valida en el lenguaje. OpenGrep la resuelve en tiempo de analisis, no en tiempo de escritura de la regla.
+- La diferencia entre `eval("literal")` y `eval($X)` es la diferencia entre detectar un caso concreto y detectar toda la familia de usos inseguros.
+- `$X` puede capturar una variable, una concatenacion, el resultado de una funcion o cualquier expresion. Por eso el patron es mas potente y tambien mas facil de afinar mal.
+- Un mensaje como "con entrada variable" es mas informativo que "uso de eval" porque explica por que la metavariable hace que el riesgo sea mas amplio.
+
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `pattern: eval($X)` para mostrar que `$X` captura el argumento sin importar su nombre concreto.
-- Haz que `message:` explique el riesgo de usar `eval` con entrada variable o controlada externamente.
-- Mantén `severity: ERROR` si la organización trata ese patrón como hallazgo serio por defecto.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Usa metavariables cuando el patron tenga partes que cambian en cada ocurrencia del codigo real.
+- Evita crear metavariables para partes que son siempre literales: eso solo añade generalidad innecesaria.
+- Si tras aplicar la regla ves que dispara en archivos de test donde `eval` es seguro, el siguiente paso (exclusiones) es la herramienta correcta, no eliminar la metavariable.
+- Una regla con una sola metavariable es el minimo viable. Aprenderás a combinar multiples en pasos avanzados.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende qué aporta una metavariable en la detección del patrón.
+- La regla contiene `pattern: eval($X)` de forma explicita.
+- El equipo puede explicar en una frase por que `$X` amplia la deteccion respecto a un literal.
+- Queda claro que la metavariable es una decision deliberada, no un comportamiento por defecto no entendido.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuracion.
 
 ## Que valida el workflow automaticamente
 

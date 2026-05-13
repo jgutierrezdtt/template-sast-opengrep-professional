@@ -5,7 +5,7 @@ Tutorial profesional de analisis estatico con OpenGrep.
 ## Que aprenderas
 
 | Paso | Tema | Herramienta | Nivel |
-|------|------|-------------|-------|
+| --- | --- | --- | --- |
 | 0 | Introduccion | — | Base |
 | 1 | Aplicacion vulnerable base | Python / Node | Base |
 | 2 | Primer escaneo con OpenGrep | OpenGrep | Base |

@@ -2,11 +2,11 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce un control de SAST y debe dejar un cambio comprensible en docs/sast-exceptions.yml.
+Este paso introduce excepciones con owner y debe dejar un cambio comprensible en `docs/sast-exceptions.yml`.
 
 ## Que vas a cambiar y por que
 
-Actualiza docs/sast-exceptions.yml para que el control de "excepciones con owner" quede explícito y revisable.
+Actualiza `docs/sast-exceptions.yml` para que cada excepción tenga un responsable visible. En este punto `owner:` deja de ser un dato accesorio y pasa a ser la pieza que permite saber quién debe revisar, renovar o cerrar la excepción cuando cambie el contexto.
 
 ## Archivo y seccion que debes modificar
 
@@ -20,16 +20,19 @@ Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo 
 
 ```yaml
 exceptions:
-rule_id:
-path:
-reason:
-owner:
+  - rule_id: insecure-eval
+    path: src/safe-eval.js
+    reason: Aceptacion temporal con seguimiento asignado
+    owner: appsec-team
+    expires_on: 2026-12-31
 ```
 
 ## Como adaptarlo correctamente
 
 - Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa nombres claros para secciones, reglas o jobs.
+- Usa `owner:` con un responsable identificable, no con una etiqueta genérica sin dueño real.
+- Mantén `reason:` y `expires_on:` porque el owner necesita contexto y plazo para actuar.
+- Usa `rule_id:` y `path:` para que el responsable sepa exactamente qué excepción supervisa.
 - Evita añadir configuración que no esté relacionada con el objetivo del paso.
 
 ## Que deberia verse al terminar
@@ -37,6 +40,7 @@ owner:
 - La intención del cambio se entiende leyendo el archivo.
 - El archivo muestra el control sin depender de comentarios ambiguos.
 - Los marcadores esperados del paso aparecen de forma natural en la configuración.
+- El lector entiende quién responde por la excepción y no solo qué excepción existe.
 
 ## Que valida el workflow automaticamente
 

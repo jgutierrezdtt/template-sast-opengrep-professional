@@ -2,48 +2,53 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce un quality gate no bloqueante y debe dejar un cambio comprensible en `.github/workflows/sast.yml`.
+Entender por que el primer quality gate SAST debe ser no bloqueante y como configurarlo para que informe sin frenar el pipeline. El quality gate no bloqueante es la forma de activar visibilidad de seguridad en un equipo sin disruptir su flujo de desarrollo.
+
+## Por que importa esto
+
+Activar un quality gate bloqueante desde el primer dia en un repositorio con deuda tecnica acumulada paraliza el desarrollo. El equipo reacciona desactivando el scanner o añadiendo excepciones masivas para poder seguir trabajando. El resultado es peor que no tener SAST.
+
+El quality gate no bloqueante permite que el equipo vea los hallazgos, los entienda y construya el proceso de resolucion antes de que el gate empiece a bloquear. Es la estrategia de incorporacion que hace que los programas SAST sobrevivan mas de un sprint.
 
 ## Que vas a cambiar y por que
 
-Actualiza `.github/workflows/sast.yml` para explicar un quality gate no bloqueante. La idea aquí es que el workflow ejecute el análisis, publique señal y permita revisar resultados sin detener todavía la entrega mientras el programa SAST sigue afinando reglas, ruido y cobertura.
+Actualiza `.github/workflows/sast.yml` para que el paso de escaneo no falle el pipeline cuando hay hallazgos. El scanner ejecuta, reporta, genera el SARIF, y el workflow termina con exito independientemente de los resultados.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `.github/workflows/sast.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Asegurate de que el paso principal de escaneo tiene `continue-on-error: true` o que el comando de escaneo no retorna exit code no-cero.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
-
 ```yaml
-name: SAST
-on:
-  pull_request:
-  push:
-jobs:
-  sast:
-    steps:
       - name: Run OpenGrep
-        run: opengrep --config rules/security-rules.yml .
+        continue-on-error: true
+        run: |
+          pip install opengrep-cli
+          opengrep scan --config rules/security-rules.yml src/
 ```
+
+## Que te esta enseñando este cambio
+
+- `continue-on-error: true` en el paso de escaneo hace que el workflow no falle cuando OpenGrep detecta hallazgos. Los hallazgos son visibles en el log pero no bloquean el merge.
+- Este comportamiento es una decision temporal, no una decision permanente. El plan es pasar al quality gate bloqueante del paso 23 una vez que el equipo haya resuelto la deuda heredada.
+- La diferencia entre este paso y ignorar el SAST es que los hallazgos son visibles, contados y documentados. El equipo sabe que hay problemas; solo eligio no bloquear todavia.
+- La transicion del quality gate no bloqueante al bloqueante es un hito importante del programa: marca que el equipo ya gestiona la deuda activamente y puede comprometerse a no introducir nueva deuda.
 
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Mantén `name: SAST` y `Run OpenGrep` como piezas visibles del control automatizado.
-- Usa `pull_request:` y `push:` para mostrar dónde se observa el gate informativo.
-- Explica en la narrativa del paso que el resultado orienta decisiones sin bloquear todavía el flujo.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Usa `continue-on-error: true` en el paso de escaneo, no en el de subida del artefacto. El artefacto debe subirse siempre.
+- Documenta en `docs/sast-analysis.md` cuando se planea activar el quality gate bloqueante. Sin esa fecha, el gate no bloqueante se convierte en permanente.
+- Un quality gate no bloqueante sigue teniendo valor si el equipo revisa los hallazgos activamente. Sin ese proceso, es ruido que nadie lee.
+- Considera un threshold intermedio: el gate no bloquea por WARNINGs pero si bloquea si aparecen nuevos ERRORs no documentados. Ese es el paso 23.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende que el workflow informa y mide sin frenar todavía la entrega.
+- El workflow ejecuta el scanner en cada push y pull_request y termina con exito aunque haya hallazgos.
+- Los hallazgos son visibles en el log del workflow y en el artefacto SARIF.
+- El equipo tiene documentado en que momento pasara al quality gate bloqueante.
+- Los markers esperados del paso aparecen de forma natural en el workflow.
 
 ## Que valida el workflow automaticamente
 

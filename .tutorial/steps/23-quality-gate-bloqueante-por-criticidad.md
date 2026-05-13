@@ -2,11 +2,11 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce un control de SAST y debe dejar un cambio comprensible en .github/workflows/sast.yml.
+Este paso introduce un quality gate bloqueante por criticidad y debe dejar un cambio comprensible en `.github/workflows/sast.yml`.
 
 ## Que vas a cambiar y por que
 
-Actualiza .github/workflows/sast.yml para que el control de "quality gate bloqueante por criticidad" quede explícito y revisable.
+Actualiza `.github/workflows/sast.yml` para explicar un gate bloqueante por criticidad. A diferencia del paso anterior, aquí el workflow ya representa una decisión de control de entrega: si OpenGrep detecta hallazgos por encima del umbral aceptado, el pipeline debe frenar el cambio.
 
 ## Archivo y seccion que debes modificar
 
@@ -20,16 +20,22 @@ Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo 
 
 ```yaml
 name: SAST
-pull_request:
-push:
-Run OpenGrep
-rules/security-rules.yml
+on:
+  pull_request:
+  push:
+jobs:
+  sast:
+    steps:
+      - name: Run OpenGrep
+        run: opengrep --config rules/security-rules.yml .
 ```
 
 ## Como adaptarlo correctamente
 
 - Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa nombres claros para secciones, reglas o jobs.
+- Mantén `name: SAST` y `Run OpenGrep` como elementos visibles del control que puede bloquear la entrega.
+- Usa `pull_request:` y `push:` para dejar claro dónde aplica el gate.
+- Explica en la narrativa del paso que el bloqueo debe responder a criticidad, no a cualquier señal menor.
 - Evita añadir configuración que no esté relacionada con el objetivo del paso.
 
 ## Que deberia verse al terminar
@@ -37,6 +43,7 @@ rules/security-rules.yml
 - La intención del cambio se entiende leyendo el archivo.
 - El archivo muestra el control sin depender de comentarios ambiguos.
 - Los marcadores esperados del paso aparecen de forma natural en la configuración.
+- El lector entiende que el workflow ya actúa como control de liberación y no solo como reporte.
 
 ## Que valida el workflow automaticamente
 

@@ -2,21 +2,21 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce las reglas por defecto de SAST y debe dejar un cambio comprensible en `rules/security-rules.yml`.
+Entender qué te aporta una regla por defecto y qué no. Este paso enseña a reconocer la estructura mínima de una regla SAST útil antes de entrar en personalizaciones más finas o necesidades específicas de la organización.
 
 ## Que vas a cambiar y por que
 
-Actualiza `rules/security-rules.yml` para que una regla base quede explícita y revisable. En este punto el foco está en entender cómo una regla por defecto se representa con identificador, mensaje, severidad y patrón, antes de empezar a personalizarla para necesidades propias.
+Vas a consolidar en `rules/security-rules.yml` una regla más completa que la del arranque. La finalidad es aprender a leer una regla por defecto como una pieza operativa: tiene un identificador estable, un mensaje para el desarrollador, una severidad y un patrón que define qué comportamiento se considera inseguro. Este paso es importante porque muchas organizaciones usan reglas por defecto sin entender realmente qué señal están introduciendo en sus pipelines.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `rules/security-rules.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Este paso se centra en una regla realista y reconocible, no solo en un identificador de ejemplo.
+- Piensa la edición como la transición entre una señal de arranque y una detección que ya podría formar parte de una política SAST básica.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
+No copies este bloque como una solución cerrada. Úsalo para entender qué elementos convierten una regla en algo legible, revisable y ejecutable.
 
 ```yaml
 rules:
@@ -26,20 +26,26 @@ rules:
     pattern: eval($X)
 ```
 
+## Que te esta enseñando esta regla
+
+- `id: insecure-eval` da un nombre estable al control y permite referenciarlo más adelante en análisis, excepciones o reporting.
+- `message:` traduce el hallazgo técnico a una explicación legible para quien recibe la alerta.
+- `severity: ERROR` marca que el patrón se considera serio desde el principio y no como simple observación.
+- `pattern: eval($X)` concreta qué forma de código está buscando OpenGrep.
+
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `id: insecure-eval` como identificador reconocible de una regla clásica de riesgo.
-- Haz que `message:` explique el problema detectado y no solo repita el nombre de la regla.
-- Mantén `severity: ERROR` cuando la intención sea tratar el patrón como hallazgo serio desde el inicio.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- No conviertas la regla en algo críptico; si un revisor no entiende qué detecta leyendo cuatro líneas, la regla ya nace mal.
+- Haz que `message:` explique el riesgo real y no solo renombre el `id`.
+- Usa este paso para entender el valor de una regla por defecto: acelerar detección conocida, no resolver todos los casos del repositorio.
+- El aprendizaje central aquí es distinguir entre tener una regla usable y tener una regla ya afinada.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende cómo se ve una regla base lista para ser ejecutada por OpenGrep.
+- El archivo contiene una regla que ya se puede leer y discutir como control SAST real.
+- El lector entiende el papel de `id`, `message`, `severity` y `pattern` dentro de una regla por defecto.
+- Queda claro que esta base todavía necesitará afinación posterior, pero ya no es solo una señal de arranque.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuración.
 
 ## Que valida el workflow automaticamente
 

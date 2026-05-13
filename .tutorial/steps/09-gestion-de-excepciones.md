@@ -2,11 +2,11 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce un control de SAST y debe dejar un cambio comprensible en docs/sast-exceptions.yml.
+Este paso introduce la gestión de excepciones en SAST y debe dejar un cambio comprensible en `docs/sast-exceptions.yml`.
 
 ## Que vas a cambiar y por que
 
-Actualiza docs/sast-exceptions.yml para que el control de "gestion de excepciones" quede explícito y revisable.
+Actualiza `docs/sast-exceptions.yml` para que la gestión de excepciones quede explícita y revisable. Aquí el objetivo ya no es solo registrar un falso positivo aislado, sino dejar una estructura capaz de gobernar aceptaciones temporales de hallazgos con responsable, motivo, alcance y fecha de revisión.
 
 ## Archivo y seccion que debes modificar
 
@@ -20,16 +20,19 @@ Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo 
 
 ```yaml
 exceptions:
-rule_id:
-path:
-reason:
-owner:
+  - rule_id: insecure-eval
+    path: src/safe-eval.js
+    reason: Excepcion temporal aprobada por analisis
+    owner: appsec-team
+    expires_on: 2026-12-31
 ```
 
 ## Como adaptarlo correctamente
 
 - Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa nombres claros para secciones, reglas o jobs.
+- Usa `rule_id:` y `path:` para que la excepción no sea más amplia de lo necesario.
+- Haz que `reason:` explique por qué se acepta temporalmente el hallazgo y no solo que se ignora.
+- Mantén `owner:` y `expires_on:` para sostener una revisión periódica y responsable.
 - Evita añadir configuración que no esté relacionada con el objetivo del paso.
 
 ## Que deberia verse al terminar
@@ -37,6 +40,7 @@ owner:
 - La intención del cambio se entiende leyendo el archivo.
 - El archivo muestra el control sin depender de comentarios ambiguos.
 - Los marcadores esperados del paso aparecen de forma natural en la configuración.
+- El lector entiende que existe un proceso mínimo de gobierno sobre las excepciones SAST.
 
 ## Que valida el workflow automaticamente
 

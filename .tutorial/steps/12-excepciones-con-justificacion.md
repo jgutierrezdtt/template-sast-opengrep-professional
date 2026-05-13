@@ -2,45 +2,57 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce excepciones con justificación y debe dejar un cambio comprensible en `docs/sast-exceptions.yml`.
+Escribir un campo `reason:` que explique el analisis que llevo a la decision, no solo que la nombre. La diferencia entre una justificacion util y una vacia puede determinar si una auditoria considera la excepcion aceptable o no.
+
+## Por que importa esto
+
+"Falso positivo", "controlado" o "excepcion aprobada" no son justificaciones. Son etiquetas. Una justificacion real responde a: que analisis se hizo, que evidencia lo soporta y bajo que condicion dejaria de ser valida.
+
+Sin eso, el campo `reason:` solo confirma que alguien tecleo algo. En una auditoria de conformidad, una excepcion con justificacion generica puede tratarse igual que una vulnerabilidad sin resolver.
 
 ## Que vas a cambiar y por que
 
-Actualiza `docs/sast-exceptions.yml` para que cada excepción tenga una justificación defendible. En este paso `reason:` es la pieza clave: debe explicar por qué el hallazgo se acepta temporalmente, qué análisis lo respalda y por qué no se trata de una omisión arbitraria.
+Mejora el campo `reason:` en `docs/sast-exceptions.yml` para que cualquier revisor que no conozca el contexto original pueda leer la entrada, entender el analisis y decidir si la excepcion sigue siendo valida en la proxima revision.
+
+Dos frases especificas son suficientes si explican el analisis concreto y la condicion que cambiaria la decision.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `docs/sast-exceptions.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Edita el campo `reason:` de la entrada existente.
+- No añadas campos nuevos: trabaja la calidad del `reason:`.
 
 ## Cambio base recomendado
-
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
 
 ```yaml
 exceptions:
   - rule_id: insecure-eval
     path: src/safe-eval.js
-    reason: Caso revisado y acotado con compensacion documentada
+    reason: El argumento de eval proviene exclusivamente de una allowlist estatica en constants.js. No existe ruta de ejecucion donde el input llegue desde el usuario o la red.
     owner: appsec-team
     expires_on: 2026-12-31
 ```
 
+## Que te esta enseñando este cambio
+
+- Un `reason:` util responde a "que analisis se hizo" y "que cambiaria esta decision". El ejemplo hace las dos cosas: nombra la allowlist estatica y descarta la ruta desde input externo.
+- La especificidad es verificable. "Allowlist estatica en constants.js sin ruta de input externo" se puede comprobar leyendo el codigo. "Uso controlado" no.
+- Un buen `reason:` reduce el coste de la revision periodica: el revisor no reconstruye el analisis desde cero, solo verifica que las condiciones siguen siendo ciertas.
+- Si no puedes escribir dos frases especificas, probablemente la decision original no fue suficientemente rigurosa para merecer una excepcion.
+
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Haz que `reason:` describa el contexto y la base de la aceptación, no una frase vacía como "aprobado".
-- Mantén `rule_id:` y `path:` para que la justificación quede unida al hallazgo concreto.
-- Conserva `owner:` y `expires_on:` porque una buena justificación sigue necesitando responsable y revisión futura.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Incluye una referencia a donde se puede verificar la condicion: linea de codigo, archivo, test, ticket.
+- Evita frases aplicables a cualquier excepcion: "revisado y aprobado", "no aplica en este contexto".
+- Si la justificacion hace referencia a un ticket externo, incluye el identificador.
+- Cuando el codigo bajo la excepcion cambie, un `reason:` especifico es lo que permite detectar que la condicion ya no se cumple.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende por qué la excepción existe y qué análisis la sostiene.
+- El `reason:` explica el analisis especifico que llevo a la decision.
+- Cualquier revisor puede entender bajo que condicion la excepcion dejaria de ser valida.
+- La justificacion es verificable: referencia algo concreto en el codigo o en el proceso.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuracion.
 
 ## Que valida el workflow automaticamente
 

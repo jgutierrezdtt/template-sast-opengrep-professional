@@ -2,44 +2,68 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce la detección de nuevas vulnerabilidades y debe dejar un cambio comprensible en `docs/sast-analysis.md`.
+Usar la baseline del paso anterior para distinguir entre un hallazgo que ya existia y uno que acaba de aparecer. Sin esta distincion, el equipo no puede saber si un PR introdujo un problema nuevo o si lo que ve el scanner siempre estuvo ahi.
+
+## Por que importa esto
+
+Una de las fricciones mas comunes al activar SAST es que el equipo ve cientos de alertas heredadas y no sabe cuales son nuevas. Esto lleva a uno de dos comportamientos: ignorar todo porque "siempre esta rojo" o bloquear el desarrollo porque "hay demasiado que corregir".
+
+La solucion profesional es separar la deuda heredada de los hallazgos nuevos. La baseline define el estado conocido. Todo lo que aparece encima de la baseline en un PR es nuevo y debe revisarse.
 
 ## Que vas a cambiar y por que
 
-Actualiza `docs/sast-analysis.md` para que el análisis ayude a distinguir hallazgos nuevos frente a deuda ya conocida. En este paso la clave está en que `## Decision` y el resto de secciones permitan comparar el resultado actual con el baseline y detectar cuándo aparece un problema que antes no estaba registrado.
+Añade una segunda entrada en `docs/sast-analysis.md` que represente un hallazgo nuevo: uno que no existia en la baseline inicial. La diferencia entre esta entrada y la del paso 13 debe ser visible: este hallazgo aparecio en un cambio de codigo especifico y su decision debe tomarse en ese contexto.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `docs/sast-analysis.md`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Añade una nueva entrada con los cinco campos del formato establecido.
+- Identifica en el hallazgo si aparecio en un commit o PR especifico. Esa informacion da contexto para la decision.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
-
 ```markdown
 ## Hallazgo
+
+Inyeccion de comando en src/utils.js linea 23: child_process.exec recibe input de req.body sin sanitizar.
+
 ## Regla o fuente
+
+command-injection (rules/security-rules.yml)
+
 ## Severidad
+
+ERROR
+
 ## Confianza
+
+Alta — trazado desde req.body hasta exec sin validacion intermedia.
+
 ## Decision
+
+Corregir en el PR actual: reemplazar exec por execFile con argumentos separados y validacion de allowlist.
 ```
+
+## Que te esta enseñando este cambio
+
+- Registrar el hallazgo en el contexto del PR donde aparecio (`Corregir en el PR actual`) conecta la deteccion con la oportunidad de corregir antes de fusionar.
+- La trazabilidad del flujo en `## Confianza` ("trazado desde req.body hasta exec sin validacion intermedia") justifica la confianza alta. No es una opinion: es el resultado de seguir el flujo de datos.
+- La distincion entre hallazgos heredados (paso 13) y hallazgos nuevos (este paso) es lo que hace que el quality gate tenga sentido: solo bloquea lo nuevo, no lo que ya existia.
+- Documentar la decision en el momento del hallazgo, no semanas despues, es lo que evita que los hallazgos de severidad alta queden pendientes indefinidamente.
 
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `## Hallazgo` y `## Regla o fuente` con precisión suficiente para comparar contra ejecuciones previas.
-- Usa `## Confianza` para distinguir una señal nueva sólida de un match que todavía requiere revisión.
-- Haz que `## Decision` deje claro si el hallazgo es nuevo, regresivo o ya conocido.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Si el hallazgo nuevo es similar a uno de la baseline, justifica por que merece una decision distinta.
+- No documentes un hallazgo como "nuevo" si ya aparecia en la baseline. Eso distorsiona las metricas del programa.
+- La decision puede ser la misma que en la baseline para un tipo similar de hallazgo, pero debe escribirse de forma especifica para este contexto.
+- Usa el campo `## Confianza` para indicar si el trazado del flujo fue completo o si hay incertidumbre.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El documento ya puede utilizarse para separar vulnerabilidades nuevas de hallazgos heredados.
+- `docs/sast-analysis.md` tiene al menos dos entradas: la baseline del paso 13 y el hallazgo nuevo de este paso.
+- La nueva entrada esta claramente vinculada a un cambio de codigo, no a una deteccion heredada.
+- La decision en la nueva entrada es accionable en el contexto del PR o del sprint actual.
+- El documento ya separa visualmente deuda heredada de hallazgos accionables.
 
 ## Que valida el workflow automaticamente
 

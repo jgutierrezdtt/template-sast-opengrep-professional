@@ -2,44 +2,67 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce la confianza del hallazgo y debe dejar un cambio comprensible en `docs/sast-analysis.md`.
+Usar el campo `## Confianza` como un indicador de cuanto se puede confiar en la deteccion antes de actuar. La confianza no es una opinion subjetiva: se basa en si el flujo de datos entre la fuente del riesgo y el punto de explotacion fue trazado o no.
+
+## Por que importa esto
+
+Los scanners SAST tienen tasas de falsos positivos que varian mucho segun la herramienta y el tipo de patron. Sin un campo de confianza, el equipo trata todos los hallazgos como igualmente fiables, lo que lleva a dos problemas: invertir tiempo en corregir falsos positivos, o desconfiar del programa entero y empezar a ignorar todo.
+
+La confianza es el campo que permite al equipo distinguir entre "este hallazgo requiere accion inmediata" y "este hallazgo requiere verificacion antes de actuar".
 
 ## Que vas a cambiar y por que
 
-Actualiza `docs/sast-analysis.md` para que la confianza del hallazgo quede explícita y revisable. Este paso sirve para recordar que no toda coincidencia encontrada por una regla merece la misma credibilidad: la confianza influye en la validación manual, en la urgencia y en la forma de comunicar el hallazgo.
+Asegurate de que las entradas en `docs/sast-analysis.md` tienen un campo `## Confianza` que va mas alla de etiquetas simples. Alta, media o baja deben ir acompañadas de la razon: que se sabe del flujo de datos, que no se sabe y que llevaria a cambiar la evaluacion.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `docs/sast-analysis.md`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Revisa las entradas existentes o añade una nueva donde el campo `## Confianza` este bien razonado.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
-
 ```markdown
 ## Hallazgo
+
+Path traversal en src/files/reader.js linea 34: el path construido con req.params.filename sin normalizacion.
+
 ## Regla o fuente
+
+path-traversal (rules/security-rules.yml)
+
 ## Severidad
+
+ERROR
+
 ## Confianza
+
+Alta — trazado completo desde req.params.filename hasta fs.readFileSync sin normalizacion ni validacion de la ruta resultante. Confirmado con prueba manual: ../../../etc/passwd retorna el archivo en entorno de desarrollo.
+
 ## Decision
+
+Correccion inmediata: normalizar la ruta con path.resolve y validar que el resultado este dentro del directorio permitido antes de abrir el archivo.
 ```
+
+## Que te esta enseñando este cambio
+
+- Una confianza alta no es una impresion: es el resultado de trazar el flujo de datos de principio a fin y confirmar que no hay validacion intermedia. La prueba manual en desarrollo es evidencia adicional que sube la confianza.
+- Una confianza media indicaria que el trazado es parcial: se sabe el origen y el destino pero hay una funcion intermedia cuyo comportamiento no se ha verificado completamente.
+- Una confianza baja justifica investigacion antes de actuar: el patron coincide pero el contexto no esta claro. En ese caso la decision es "investigar" y no directamente "corregir" o "excepcionar".
+- El nivel de confianza determina la urgencia operativa tanto o mas que la severidad: un ERROR de confianza baja puede esperar a verificacion; un WARNING de confianza alta puede necesitar accion inmediata.
 
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `## Confianza` para reflejar si el match es sólido, probable o todavía ambiguo.
-- Haz que `## Decision` cambie en función de esa confianza: validar, investigar, remediar o ajustar la regla.
-- Mantén visibles `## Hallazgo` y `## Regla o fuente` para que la confianza pueda relacionarse con el origen concreto del match.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Usa "trazado desde X hasta Y" como estructura base para justificar confianza alta.
+- Indica explicitamente que informacion falta para justificar confianza media o baja.
+- Si la prueba manual confirma el hallazgo, documentalo: es la evidencia mas solida para confianza alta.
+- No pongas confianza alta en hallazgos donde el flujo de datos no fue trazado. Eso infla artificialmente la urgencia y erosiona la credibilidad del programa.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende cómo la confianza altera la respuesta operativa al hallazgo.
+- Al menos una entrada en `docs/sast-analysis.md` tiene una confianza con razonamiento explicito, no solo una etiqueta.
+- El equipo puede explicar por que la confianza es alta, media o baja para cada hallazgo documentado.
+- Queda claro como el nivel de confianza influye en la decision tomada.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuracion.
 
 ## Que valida el workflow automaticamente
 

@@ -2,44 +2,73 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce el baseline inicial y debe dejar un cambio comprensible en `docs/sast-analysis.md`.
+Crear el primer registro formal de hallazgos en `docs/sast-analysis.md`. Este documento es la linea base contra la que se mediran todos los hallazgos futuros: sin el, no hay forma de saber si el programa SAST esta mejorando o acumulando deuda.
+
+## Por que importa esto
+
+Cuando un equipo activa SAST por primera vez en un repositorio existente, normalmente aparecen decenas de hallazgos. La reaccion habitual es intentar corregirlos todos a la vez o ignorarlos colectivamente. Las dos son malas opciones.
+
+El enfoque profesional es crear una baseline: registrar el estado inicial de forma estructurada, priorizar cuales merecen atencion inmediata y tratar el resto como deuda conocida que se ira reduciendo con cada sprint.
+
+Sin una baseline, el equipo no puede distinguir entre un hallazgo nuevo y uno que llevaba meses en el codigo.
 
 ## Que vas a cambiar y por que
 
-Actualiza `docs/sast-analysis.md` para que el análisis sirva como línea base. En este paso no solo registras un hallazgo, sino una referencia desde la que luego podrás comparar nuevas ejecuciones, distinguir deuda existente de hallazgos nuevos y sostener decisiones de priorización.
+Crea la primera entrada en `docs/sast-analysis.md` con el formato de analisis: hallazgo, regla o fuente, severidad, confianza y decision. Aunque sea un solo hallazgo, este documento establece el patron que usaras para todos los demas.
+
+La decision tomada en cada entrada es tan importante como el hallazgo mismo: documenta si vas a corregirlo, si es una excepcion justificada o si se acepta como riesgo conocido.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `docs/sast-analysis.md`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Si el archivo no existe, créalo con la primera entrada de analisis.
+- Usa el formato de cabeceras `## Hallazgo`, `## Regla o fuente`, `## Severidad`, `## Confianza`, `## Decision` para que el proceso de validacion automatica lo reconozca.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
-
 ```markdown
 ## Hallazgo
+
+Uso inseguro de eval en src/app.js linea 47.
+
 ## Regla o fuente
+
+insecure-eval (rules/security-rules.yml)
+
 ## Severidad
+
+ERROR
+
 ## Confianza
+
+Alta — el argumento proviene directamente de req.query.
+
 ## Decision
+
+Corregir: reemplazar eval por una funcion especifica que procese solo los valores esperados.
 ```
+
+## Que te esta enseñando este cambio
+
+- `## Hallazgo` describe el problema concreto: archivo, linea, contexto. No es un resumen de la regla sino del codigo real.
+- `## Regla o fuente` vincula el hallazgo al control que lo detecto. Si la regla cambia o se retira, sabes que entradas del analisis quedan sin cobertura.
+- `## Severidad` hereda la severidad de la regla pero puede ajustarse por contexto. Un ERROR en un servicio interno puede tener distinta urgencia que en una API publica.
+- `## Confianza` es el campo que mas valor aporta despues de la severidad: indica si el hallazgo es un caso real, un posible falso positivo o una deteccion probable pero no confirmada. Sin este campo, todos los hallazgos parecen iguales.
+- `## Decision` es el compromiso del equipo con ese hallazgo especifico: corregir, excepcionar con justificacion, o aceptar como riesgo conocido con fecha de revision.
 
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `## Hallazgo` y `## Regla o fuente` para describir de forma estable qué se detectó y qué lo originó.
-- Usa `## Severidad` y `## Confianza` para que futuras comparaciones mantengan el mismo marco de lectura.
-- Haz que `## Decision` indique si el hallazgo forma parte de la línea base aceptada, pendiente o priorizada.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- No registres solo los hallazgos criticos en la baseline. Los de severidad media son los que mas se acumulan con el tiempo.
+- Un hallazgo sin decision pendiente no pertenece a la baseline: o se corrige o se documenta la excepcion.
+- La confianza no es una opinion subjetiva: se basa en el analisis del flujo de datos entre la entrada del hallazgo y la fuente del riesgo.
+- Este documento evolucionara con cada sprint. Diseñalo para que sea legible en seis meses, no solo hoy.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El documento ya puede servir como referencia para medir evolución del programa SAST.
+- `docs/sast-analysis.md` existe y tiene al menos una entrada completa con los cinco campos.
+- La entrada describe un hallazgo real o realista del repositorio, no solo un ejemplo de plantilla.
+- La decision tomada es especifica: no "pendiente" sin contexto sino una accion concreta o una aceptacion justificada.
+- El documento puede servir como punto de partida para medir la reduccion de hallazgos en sprints futuros.
 
 ## Que valida el workflow automaticamente
 

@@ -1,45 +1,39 @@
-# Paso 30. Medalla final sast professional
+# Paso 30. Medalla final SAST Professional
 
 ## Objetivo de aprendizaje
 
-Este paso cierra el recorrido de SAST Professional y debe dejar un cambio comprensible en `docs/sast-analysis.md`.
+Consolidar la vision completa del programa SAST que has construido a lo largo del tutorial y entender que elementos definen la diferencia entre un programa en funcionamiento y uno en nivel profesional.
 
-## Que vas a cambiar y por que
+## Lo que has construido
 
-Actualiza `docs/sast-analysis.md` para cerrar el tutorial con una evidencia final coherente. La idea no es añadir otro marcador, sino dejar claro que el documento ya reúne hallazgo, fuente, severidad, confianza y decisión como base de un programa SAST profesional, gobernable y revisable.
+A lo largo de los 30 pasos has construido un programa SAST con todos sus componentes:
 
-## Archivo y seccion que debes modificar
+- Reglas custom propias del equipo con patrones, metavariables y exclusiones calibradas (pasos 5-7).
+- Sistema de excepciones con justificacion, owner, caducidad y revision periodica (pasos 8-12).
+- Baseline de hallazgos con analisis de severidad contextual y confianza (pasos 13-17).
+- Inventario de repositorios con vision organizativa del riesgo (pasos 18-19).
+- Pipeline CI/CD con SAST integrado, exportacion SARIF y quality gates calibrados (pasos 20-23).
+- Reglas como politica organizativa y proceso de revision de excepciones vencidas (pasos 24-25).
+- Metricas, reporting ejecutivo y tecnico para audiencias distintas (pasos 26-28).
+- Afinacion de reglas basada en datos reales del programa (paso 29).
 
-- Archivo objetivo: `docs/sast-analysis.md`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+## Que distingue nivel professional
 
-## Cambio base recomendado
+Un programa SAST professional no se mide por el numero de reglas activas ni por la herramienta que usa. Se mide por:
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
+- Precision: las reglas detectan lo que deben detectar y no generan ruido que el equipo aprenda a ignorar.
+- Trazabilidad: cada excepcion tiene owner, justificacion y caducidad. Cada hallazgo critico tiene un plan de correccion con fecha.
+- Escalabilidad: el programa funciona igual en 5 repositorios que en 50, porque las decisiones de gobierno son sistematicas y no dependen de que alguien recuerde ejecutar algo.
+- Visibilidad: el management sabe si el riesgo del software mejora o empeora sin necesitar acceso al pipeline.
 
-```markdown
-## Hallazgo
-## Regla o fuente
-## Severidad
-## Confianza
-## Decision
-```
+## Que hacer a continuacion
 
-## Como adaptarlo correctamente
+El programa que has construido es un punto de partida, no un estado final. Los proximos pasos naturales son:
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa las cinco secciones como resumen final del trabajo realizado a lo largo del tutorial.
-- Haz que `## Decision` refleje madurez operativa: remediado, priorizado, aceptado temporalmente o listo para auditoría.
-- Mantén un lenguaje claro para que el documento funcione como evidencia final del laboratorio.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
-
-## Que deberia verse al terminar
-
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende que el programa SAST descrito ya tiene forma completa y revisable.
+- Centralizar las reglas en un repositorio compartido por toda la organizacion para que los cambios lleguen a todos los equipos a la vez.
+- Integrar los resultados SARIF con GitHub Code Scanning para tener el historial de hallazgos visible directamente en los pull requests.
+- Automatizar la deteccion de excepciones proximas a vencer para que el proceso de revision periodica no dependa de recordatorios manuales.
+- Añadir metricas de cobertura de reglas: no solo cuantos hallazgos hay sino cuantos tipos de vulnerabilidad estan cubiertos por el conjunto de reglas activo.
 
 ## Que valida el workflow automaticamente
 

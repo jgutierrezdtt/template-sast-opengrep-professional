@@ -2,44 +2,62 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce la afinación de reglas y debe dejar un cambio comprensible en `rules/security-rules.yml`.
+Mejorar la precision de las reglas existentes reduciendo falsos positivos sin perder detecciones reales. La afinacion es la actividad que convierte un conjunto de reglas de arranque en un conjunto de reglas de produccion.
+
+## Por que importa esto
+
+Una regla que genera muchos falsos positivos pierde credibilidad rapidamente. El equipo de desarrollo aprende a ignorarla. Una regla que genera muchos falsos negativos (no detecta los casos reales) da una falsa sensacion de seguridad.
+
+La afinacion es el proceso iterativo que lleva una regla desde "detecta el patron" hasta "detecta el patron de forma util en nuestro repositorio especifico".
+
+Un programa SAST maduro no tiene mas reglas que uno inmaduro: tiene reglas mas precisas.
 
 ## Que vas a cambiar y por que
 
-Actualiza `rules/security-rules.yml` para que la afinación de reglas quede explícita y revisable. En esta fase la regla `insecure-eval` ya no es solo un detector inicial: es una regla madura que debe equilibrar cobertura, claridad del mensaje y reducción de ruido sin perder la intención de control.
+Actualiza al menos una regla en `rules/security-rules.yml` para añadir un refinamiento que mejore su precision: una ruta de exclusion, una condicion adicional, un mensaje mas especifico o una metavariable mas acotada. El cambio debe estar justificado por un hallazgo real del programa.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `rules/security-rules.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Edita una regla existente para añadir un refinamiento de precision.
+- Documenta en la regla el motivo del refinamiento.
 
 ## Cambio base recomendado
-
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
 
 ```yaml
 rules:
   - id: insecure-eval
-    message: Detecta uso inseguro de eval con criterio afinado
+    message: Evita eval con input controlado por usuario. Alternativa: usa una funcion de despacho con allowlist de operaciones permitidas.
     severity: ERROR
+    languages: [javascript]
     pattern: eval($X)
+    paths:
+      exclude:
+        - "**/__tests__/**"
+        - "**/test/**"
+        - "**/fixtures/**"
 ```
+
+## Que te esta enseñando este cambio
+
+- `paths.exclude` con rutas de test es la afinacion mas comun y mas util. Los archivos de test suelen usar `eval` de forma segura y controlada. Excluirlos reduce el ruido sin perder detecciones en codigo de produccion.
+- El `message:` actualizado ahora incluye la alternativa: "usa una funcion de despacho con allowlist". Eso convierte la regla en orientacion de desarrollo, no solo en una señal de parada.
+- La lista de exclusiones usa globbing (`**/__tests__/**`) para cubrir estructuras de directorio anidadas. Usar rutas fijas seria menos robusto.
+- Añadir la alternativa en el mensaje es una afinacion de calidad, no de precision tecnica. Pero es igualmente importante: reduce el tiempo que el desarrollador tarda en saber que hacer despues de ver el hallazgo.
 
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `message:` para reflejar mejor el criterio final de la regla y no un texto genérico.
-- Mantén `pattern: eval($X)` como núcleo del control mientras afinas precisión y contexto alrededor de la regla.
-- Piensa este paso como el cierre del ciclo de mejora de reglas: menos ruido, mejor señal y misma intención de protección.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Basa cada afinacion en un hallazgo real del programa: "teniamos X falsos positivos en tests" es la justificacion. No afines de forma preventiva sin datos.
+- Documenta en el historial de git por que se añadio cada exclusion. Un mes despues, nadie recordara si la exclusion fue por falso positivo confirmado o por conveniencia.
+- No uses exclusiones muy amplias como `src/legacy/**` sin analizar cada archivo del directorio. Una exclusion amplia puede silenciar hallazgos reales.
+- Despues de cada afinacion, ejecuta el scanner sobre el repositorio y compara el numero de hallazgos antes y despues. Si bajo mas de lo esperado, la exclusion puede ser demasiado amplia.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende que la regla ya está afinada para un uso más maduro dentro del programa SAST.
+- Al menos una regla en `rules/security-rules.yml` tiene un refinamiento documentado que mejora su precision.
+- El refinamiento esta justificado por la experiencia del programa, no por conveniencia.
+- El `message:` de la regla incluye la alternativa recomendada.
+- Los markers esperados del paso siguen presentes de forma natural en el archivo.
 
 ## Que valida el workflow automaticamente
 

@@ -2,44 +2,75 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce métricas y debe dejar un cambio comprensible en `docs/sast-analysis.md`.
+Definir las metricas que miden la salud del programa SAST y saber como calcularlas desde los datos que ya has generado en los pasos anteriores. Las metricas no son un fin en si mismas: son la herramienta que permite detectar tendencias y tomar decisiones basadas en datos.
+
+## Por que importa esto
+
+Sin metricas, el programa SAST solo genera alertas. Con metricas, el programa genera evidencia de si el riesgo esta aumentando, disminuyendo o estancado.
+
+Las metricas correctas permiten responder preguntas reales: "el tiempo medio de resolucion de ERRORs esta mejorando", "el numero de excepciones activas lleva tres sprints creciendo sin resoluciones asociadas", "el porcentaje de hallazgos criticos en el backlog baja cada mes".
+
+Sin esas respuestas, el programa SAST es una caja negra para los responsables de negocio.
 
 ## Que vas a cambiar y por que
 
-Actualiza `docs/sast-analysis.md` para que el análisis pueda alimentar métricas útiles. En este paso importa que `## Hallazgo`, `## Regla o fuente`, `## Severidad`, `## Confianza` y `## Decision` se redacten de forma suficientemente consistente como para convertirse en volumen, tendencia, distribución y estado de remediación.
+Añade en `docs/sast-analysis.md` una seccion de metricas que muestre el estado actual del programa con los datos generados en los pasos anteriores. No necesitas calcular metricas en tiempo real: el objetivo es documentar que metricas son relevantes y como se calculan desde los datos disponibles.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `docs/sast-analysis.md`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Añade una seccion de metricas que calcule los indicadores clave del programa con los datos de hallazgos y excepciones ya documentados.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
-
 ```markdown
 ## Hallazgo
+
+Metricas del programa SAST — corte Q2 2026.
+
 ## Regla o fuente
+
+Agregado de docs/sast-analysis.md y docs/sast-exceptions.yml
+
 ## Severidad
+
+Informativo
+
 ## Confianza
+
+Alta — calculado desde datos documentados en este repositorio.
+
 ## Decision
+
+Publicar como parte del reporting trimestral. Metricas a seguir:
+- Total hallazgos activos: 4 (2 ERROR, 2 WARNING)
+- Hallazgos resueltos en el sprint: 1
+- Tiempo medio de resolucion ERRORs: 8 dias
+- Excepciones activas: 1 (vence en 2026-09-30)
+- Excepciones vencidas sin renovar: 0
+- Cobertura de repositorios con SAST activo: 3 de 5
 ```
+
+## Que te esta enseñando este cambio
+
+- Las metricas del programa SAST tienen que calcularse desde los datos que el equipo ya mantiene, no desde herramientas externas que requieren integracion adicional. `docs/sast-analysis.md` y `docs/sast-exceptions.yml` son suficientes para las metricas basicas.
+- "Excepciones vencidas sin renovar: 0" es una metrica de gobierno, no tecnica. Es la que demuestra que el proceso de revision periodica del paso 25 se esta ejecutando.
+- "Cobertura de repositorios con SAST activo" conecta el inventario del paso 18 con las metricas del programa. Sin esta metrica, el programa no sabe si tiene cobertura real o parcial.
+- El tiempo medio de resolucion de ERRORs es la metrica que mas interesa a los equipos de negocio: mide la velocidad de respuesta del equipo de desarrollo ante hallazgos criticos.
 
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `## Regla o fuente` y `## Severidad` de forma consistente para permitir agrupaciones fiables.
-- Mantén `## Confianza` visible porque también afecta cómo se interpretan las métricas.
-- Haz que `## Decision` permita distinguir hallazgos abiertos, aceptados, revisados o priorizados.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Define las metricas que usaras antes de necesitarlas para el reporting. Una metrica que no se calcula consistentemente no es util para tendencias.
+- Las metricas de cobertura (repositorios con SAST activo) son tan importantes como las de hallazgos: un programa con baja cobertura tiene metricas de hallazgos engañosamente bajas.
+- Si el numero de excepciones activas lleva varios sprints creciendo sin resoluciones, eso es una señal de alarma que las metricas deben hacer visible.
+- Este documento es la entrada del paso 27 (reporting ejecutivo) y del paso 28 (reporting tecnico). El reporting ejecutivo toma las metricas de impacto de negocio; el tecnico toma las metricas de cobertura y calidad de deteccion.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El documento ya puede servir como base para métricas accionables del programa SAST.
+- `docs/sast-analysis.md` tiene una seccion de metricas con los indicadores clave calculados.
+- Las metricas cubren hallazgos activos, tiempo de resolucion, excepciones activas y cobertura de repositorios.
+- El equipo puede actualizar estas metricas con cada sprint sin necesidad de herramientas adicionales.
+- Los markers esperados del paso siguen presentes de forma natural en la configuracion.
 
 ## Que valida el workflow automaticamente
 

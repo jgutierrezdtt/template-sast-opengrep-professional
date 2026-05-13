@@ -2,11 +2,11 @@
 
 ## Objetivo de aprendizaje
 
-Las reglas por defecto rara vez cubren los patrones inseguros propios de la organización. Aquí empiezas a escribir una regla útil y mantenible.
+Las reglas por defecto rara vez cubren los patrones inseguros propios de la organización. Aquí empiezas a escribir una regla útil y mantenible dentro de `rules/security-rules.yml`.
 
 ## Que vas a cambiar y por que
 
-Añade en `rules/security-rules.yml` una regla explícita que detecte un patrón inseguro reconocible, con identificador, mensaje y severidad.
+Refuerza en `rules/security-rules.yml` una regla explícita que detecte un patrón inseguro reconocible, con identificador, mensaje y severidad. El valor del paso está en tratar la regla ya como una pieza custom del programa y no solo como un ejemplo de arranque.
 
 ## Archivo y seccion que debes modificar
 
@@ -31,6 +31,8 @@ rules:
 
 - Elige un patrón sencillo y fácilmente demostrable, como `eval($X)` o un `exec` inseguro.
 - Haz que el mensaje diga qué está mal y no solo que hubo un match.
+- Mantén `id: insecure-eval` como ejemplo de una convención de naming estable para reglas reutilizables.
+- Usa `severity: ERROR` cuando quieras que la regla represente una señal clara de riesgo y no una mera observación.
 - Si el repositorio no es JavaScript, cambia `languages` y `pattern` al lenguaje real del ejemplo.
 
 ## Que deberia verse al terminar
@@ -38,6 +40,7 @@ rules:
 - La regla tiene `id`, `message`, `severity` y `pattern`.
 - Cualquier revisor entiende el riesgo leyendo la regla.
 - El patrón no es tan amplio que convierta todo en falsos positivos.
+- El lector entiende que ya existe una regla propia que el equipo puede evolucionar.
 
 ## Que valida el workflow automaticamente
 

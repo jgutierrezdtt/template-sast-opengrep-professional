@@ -2,21 +2,21 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce el primer escaneo con OpenGrep y debe dejar un cambio comprensible en `rules/security-rules.yml`.
+Entender qué aporta el primer escaneo con OpenGrep. El objetivo de este paso no es construir todavía la mejor regla del laboratorio, sino comprobar que existe una señal básica, que el motor puede cargarla y que tú sabes relacionar esa regla con los resultados que aparezcan.
 
 ## Que vas a cambiar y por que
 
-Actualiza `rules/security-rules.yml` para que el primer escaneo con OpenGrep quede anclado a una regla comprensible. En esta fase el objetivo no es la sofisticación, sino disponer de una regla mínima y visible que permita validar el flujo de análisis y empezar a observar resultados con criterio.
+Vas a mantener en `rules/security-rules.yml` una regla muy simple para preparar el primer recorrido completo: regla, escaneo y lectura inicial del resultado. La clave pedagógica del paso es aprender que un escaneo útil empieza por una señal comprensible. Si la primera regla ya nace confusa, el equipo no sabrá si un hallazgo viene de una detección real, de una mala configuración o de una política mal definida.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `rules/security-rules.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Este paso sigue trabajando sobre la regla mínima del arranque para que el primer escaneo tenga una referencia clara.
+- Piensa el cambio como preparación del flujo completo: definir la regla, lanzar el análisis y reconocer después qué señal produjo.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
+No copies este bloque como solución final. Aquí interesa que la regla sea lo bastante simple como para entender qué está pasando durante el primer escaneo.
 
 ```yaml
 rules:
@@ -24,20 +24,25 @@ rules:
     severity: WARNING
 ```
 
+## Que deberias observar en este primer escaneo
+
+- `id: demo-rule` te permite reconocer con facilidad qué regla disparó un resultado.
+- `severity: WARNING` evita que el primer contacto con el análisis se convierta de inmediato en un bloqueo duro; primero hay que aprender a leer la señal.
+- La simplicidad de la regla ayuda a separar problemas del motor, de la configuración o del código analizado.
+
 ## Como adaptarlo correctamente
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Mantén `id: demo-rule` como identificador simple para reconocer fácilmente qué regla dispara el primer escaneo.
-- Usa `severity: WARNING` como señal de arranque que permita ver resultados sin endurecer todavía el programa.
-- Piensa este paso como una comprobación de flujo: regla, ejecución y lectura básica de hallazgos.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- Mantén la regla lo bastante simple como para que cualquier resultado sea fácil de atribuir a esta primera configuración.
+- No intentes endurecer aún la política; en este paso importa validar el circuito completo de análisis.
+- Usa `WARNING` como una señal de arranque que invite a observar y entender antes de bloquear.
+- El aprendizaje real aquí es conectar la regla con el comportamiento del escaneo.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende cómo arranca el primer escaneo estático del laboratorio.
+- El lector entiende qué regla se usa para arrancar el análisis y por qué es deliberadamente simple.
+- Queda claro que el primer escaneo sirve para validar el flujo, no para declarar madura la cobertura SAST.
+- La relación entre la regla definida y los resultados esperados del análisis se vuelve explícita.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuración.
 
 ## Que valida el workflow automaticamente
 

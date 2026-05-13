@@ -2,11 +2,11 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce un control de SAST y debe dejar un cambio comprensible en rules/security-rules.yml.
+Este paso introduce las reglas por defecto de SAST y debe dejar un cambio comprensible en `rules/security-rules.yml`.
 
 ## Que vas a cambiar y por que
 
-Actualiza rules/security-rules.yml para que el control de "reglas por defecto" quede explícito y revisable.
+Actualiza `rules/security-rules.yml` para que una regla base quede explícita y revisable. En este punto el foco está en entender cómo una regla por defecto se representa con identificador, mensaje, severidad y patrón, antes de empezar a personalizarla para necesidades propias.
 
 ## Archivo y seccion que debes modificar
 
@@ -20,16 +20,18 @@ Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo 
 
 ```yaml
 rules:
-id: insecure-eval
-message:
-severity: ERROR
-pattern: eval($X)
+  - id: insecure-eval
+    message: Detecta uso inseguro de eval
+    severity: ERROR
+    pattern: eval($X)
 ```
 
 ## Como adaptarlo correctamente
 
 - Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa nombres claros para secciones, reglas o jobs.
+- Usa `id: insecure-eval` como identificador reconocible de una regla clásica de riesgo.
+- Haz que `message:` explique el problema detectado y no solo repita el nombre de la regla.
+- Mantén `severity: ERROR` cuando la intención sea tratar el patrón como hallazgo serio desde el inicio.
 - Evita añadir configuración que no esté relacionada con el objetivo del paso.
 
 ## Que deberia verse al terminar
@@ -37,6 +39,7 @@ pattern: eval($X)
 - La intención del cambio se entiende leyendo el archivo.
 - El archivo muestra el control sin depender de comentarios ambiguos.
 - Los marcadores esperados del paso aparecen de forma natural en la configuración.
+- El lector entiende cómo se ve una regla base lista para ser ejecutada por OpenGrep.
 
 ## Que valida el workflow automaticamente
 

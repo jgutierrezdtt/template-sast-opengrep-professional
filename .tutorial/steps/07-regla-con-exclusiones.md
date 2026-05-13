@@ -2,21 +2,21 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce una regla con exclusiones y debe dejar un cambio comprensible en `rules/security-rules.yml`.
+Aprender a reducir falsos positivos sin desactivar la detección principal. En OpenGrep, una exclusión no existe para esconder alertas molestas, sino para sacar del alcance rutas o contextos que no deben tratarse igual que el código real de producción.
 
 ## Que vas a cambiar y por que
 
-Actualiza `rules/security-rules.yml` para que el ajuste de una regla con exclusiones quede explícito y revisable. Aunque el validador sigue pidiendo la misma base de `insecure-eval`, aquí la lectura correcta es que la regla ya está en condiciones de afinarse para evitar matches irrelevantes sin perder el patrón principal.
+Vas a volver sobre la regla `insecure-eval` en `rules/security-rules.yml`. Hasta ahora te servía para detectar cualquier uso de `eval(...)`; en este paso debes empezar a pensar qué partes del repositorio sí quieres inspeccionar y cuáles conviene dejar fuera porque generarían ruido. El validador mantiene la misma base de la regla porque el aprendizaje no está en inventar otro patrón, sino en entender cómo se refina una detección existente sin romper su intención.
 
 ## Archivo y seccion que debes modificar
 
 - Archivo objetivo: `rules/security-rules.yml`.
-- Aplícalo en la parte del archivo que corresponde al título del paso.
-- Si el archivo aún no existe, créalo con este contenido inicial y luego evoluciona desde ahí en los siguientes pasos.
+- Este paso se centra en la regla `insecure-eval`, no en crear una segunda regla distinta.
+- Piensa la edición como una decisión de alcance: primero dejas claro qué riesgo sigues detectando y después decides qué contextos pueden quedar excluidos con justificación.
 
 ## Cambio base recomendado
 
-Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo al contexto del repositorio.
+No copies este bloque como solución final. Úsalo como núcleo de una regla que sigue detectando el riesgo principal antes de que empieces a afinar exclusiones concretas.
 
 ```yaml
 rules:
@@ -26,20 +26,27 @@ rules:
     pattern: eval($X)
 ```
 
-## Como adaptarlo correctamente
+## Que significa cada parte de la regla en este paso
 
-- Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa `pattern: eval($X)` como núcleo estable de la regla aunque después vayas a limitar contexto o rutas.
-- Haz que `message:` siga siendo comprensible incluso cuando la regla empiece a excluir casos legítimos.
-- Piensa este paso como afinación de precisión: excluir ruido sin vaciar la capacidad de detección.
-- Evita añadir configuración que no esté relacionada con el objetivo del paso.
+- `id: insecure-eval` da nombre estable al control que luego podrás afinar, documentar o excepcionar.
+- `message:` debe seguir explicando el riesgo al desarrollador aunque más adelante excluyas rutas legítimas.
+- `severity: ERROR` recuerda que estás afinando un hallazgo serio, no rebajándolo por comodidad.
+- `pattern: eval($X)` mantiene el comportamiento base; las exclusiones recortan el alcance alrededor de ese patrón, no lo sustituyen.
+
+## Como pensar las exclusiones correctamente
+
+- Excluye solo contextos que puedas defender técnicamente, por ejemplo tests preparados para demostrar vulnerabilidades, fixtures o código generado que no representa lógica de negocio.
+- No excluyas directorios solo porque producen muchos hallazgos; primero entiende por qué aparecen y si realmente no son relevantes.
+- Conserva `pattern: eval($X)` como núcleo de la regla para que la detección siga siendo reconocible y mantenible.
+- Haz que `message:` siga teniendo sentido para quien reciba la alerta después de aplicar exclusiones.
+- El objetivo del paso es reducir ruido sin perder cobertura útil.
 
 ## Que deberia verse al terminar
 
-- La intención del cambio se entiende leyendo el archivo.
-- El archivo muestra el control sin depender de comentarios ambiguos.
-- Los marcadores esperados del paso aparecen de forma natural en la configuración.
-- El lector entiende que la regla está lista para empezar a reducir ruido sin perder su intención.
+- La regla sigue expresando con claridad que `eval` es un uso peligroso.
+- El lector entiende que el siguiente refinamiento natural es acotar rutas o contextos concretos, no cambiar el patrón principal.
+- Queda claro que una exclusión bien hecha mejora precisión, pero una exclusión mala puede esconder hallazgos reales.
+- Los marcadores esperados del paso siguen presentes de forma natural en la configuración.
 
 ## Que valida el workflow automaticamente
 

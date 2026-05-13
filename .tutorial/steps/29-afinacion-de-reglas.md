@@ -2,11 +2,11 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce un control de SAST y debe dejar un cambio comprensible en rules/security-rules.yml.
+Este paso introduce la afinación de reglas y debe dejar un cambio comprensible en `rules/security-rules.yml`.
 
 ## Que vas a cambiar y por que
 
-Actualiza rules/security-rules.yml para que el control de "afinacion de reglas" quede explícito y revisable.
+Actualiza `rules/security-rules.yml` para que la afinación de reglas quede explícita y revisable. En esta fase la regla `insecure-eval` ya no es solo un detector inicial: es una regla madura que debe equilibrar cobertura, claridad del mensaje y reducción de ruido sin perder la intención de control.
 
 ## Archivo y seccion que debes modificar
 
@@ -20,16 +20,18 @@ Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo 
 
 ```yaml
 rules:
-id: insecure-eval
-message:
-severity: ERROR
-pattern: eval($X)
+  - id: insecure-eval
+    message: Detecta uso inseguro de eval con criterio afinado
+    severity: ERROR
+    pattern: eval($X)
 ```
 
 ## Como adaptarlo correctamente
 
 - Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa nombres claros para secciones, reglas o jobs.
+- Usa `message:` para reflejar mejor el criterio final de la regla y no un texto genérico.
+- Mantén `pattern: eval($X)` como núcleo del control mientras afinas precisión y contexto alrededor de la regla.
+- Piensa este paso como el cierre del ciclo de mejora de reglas: menos ruido, mejor señal y misma intención de protección.
 - Evita añadir configuración que no esté relacionada con el objetivo del paso.
 
 ## Que deberia verse al terminar
@@ -37,6 +39,7 @@ pattern: eval($X)
 - La intención del cambio se entiende leyendo el archivo.
 - El archivo muestra el control sin depender de comentarios ambiguos.
 - Los marcadores esperados del paso aparecen de forma natural en la configuración.
+- El lector entiende que la regla ya está afinada para un uso más maduro dentro del programa SAST.
 
 ## Que valida el workflow automaticamente
 

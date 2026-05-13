@@ -2,11 +2,11 @@
 
 ## Objetivo de aprendizaje
 
-Este paso introduce un control de SAST y debe dejar un cambio comprensible en docs/sast-exceptions.yml.
+Este paso introduce excepciones con justificación y debe dejar un cambio comprensible en `docs/sast-exceptions.yml`.
 
 ## Que vas a cambiar y por que
 
-Actualiza docs/sast-exceptions.yml para que el control de "excepciones con justificacion" quede explícito y revisable.
+Actualiza `docs/sast-exceptions.yml` para que cada excepción tenga una justificación defendible. En este paso `reason:` es la pieza clave: debe explicar por qué el hallazgo se acepta temporalmente, qué análisis lo respalda y por qué no se trata de una omisión arbitraria.
 
 ## Archivo y seccion que debes modificar
 
@@ -20,16 +20,19 @@ Este bloque no es para pegar a ciegas: úsalo como punto de partida y ajústalo 
 
 ```yaml
 exceptions:
-rule_id:
-path:
-reason:
-owner:
+  - rule_id: insecure-eval
+    path: src/safe-eval.js
+    reason: Caso revisado y acotado con compensacion documentada
+    owner: appsec-team
+    expires_on: 2026-12-31
 ```
 
 ## Como adaptarlo correctamente
 
 - Mantén el cambio pequeño y centrado en una sola idea por paso.
-- Usa nombres claros para secciones, reglas o jobs.
+- Haz que `reason:` describa el contexto y la base de la aceptación, no una frase vacía como "aprobado".
+- Mantén `rule_id:` y `path:` para que la justificación quede unida al hallazgo concreto.
+- Conserva `owner:` y `expires_on:` porque una buena justificación sigue necesitando responsable y revisión futura.
 - Evita añadir configuración que no esté relacionada con el objetivo del paso.
 
 ## Que deberia verse al terminar
@@ -37,6 +40,7 @@ owner:
 - La intención del cambio se entiende leyendo el archivo.
 - El archivo muestra el control sin depender de comentarios ambiguos.
 - Los marcadores esperados del paso aparecen de forma natural en la configuración.
+- El lector entiende por qué la excepción existe y qué análisis la sostiene.
 
 ## Que valida el workflow automaticamente
 
